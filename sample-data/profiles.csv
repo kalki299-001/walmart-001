@@ -1,0 +1,5 @@
+
+id,user_id,email,name,avatar_url,created_at,updated_at
+880e8400-e29b-41d4-a716-446655440001,110e8400-e29b-41d4-a716-446655440001,john.doe@example.com,John Doe,https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face,2024-01-15T10:00:00Z,2024-01-15T10:00:00Z
+880e8400-e29b-41d4-a716-446655440002,110e8400-e29b-41d4-a716-446655440002,jane.smith@example.com,Jane Smith,https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100&h=100&fit=crop&crop=face,2024-01-16T10:00:00Z,2024-01-16T10:00:00Z
+880e8400-e29b-41d4-a716-446655440003,110e8400-e29b-41d4-a716-446655440003,mike.wilson@example.com,Mike Wilson,https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face,2024-01-17T10:00:00Z,2024-01-17T10:00:00Z
