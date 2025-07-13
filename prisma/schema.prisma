@@ -1,0 +1,103 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = "postgresql://postgres:[YOUR-PASSWORD]@db.thwmdpvigjzvpnihgksd.supabase.co:5432/postgres"
+  directUrl = "postgresql://postgres:[YOUR-PASSWORD]@db.thwmdpvigjzvpnihgksd.supabase.co:5432/postgres"
+}
+
+model Profile {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId     String   @unique @map("user_id") @db.Uuid
+  email      String
+  name       String?
+  avatarUrl  String?  @map("avatar_url")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @default(now()) @updatedAt @map("updated_at")
+
+  cartItems     CartItem[]
+  wishlistItems WishlistItem[]
+  following     Following[]
+
+  @@map("profiles")
+}
+
+model Creator {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  name           String
+  avatarUrl      String?  @map("avatar_url")
+  followersCount Int      @default(0) @map("followers_count")
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  streams   Stream[]
+  followers Following[]
+
+  @@map("creators")
+}
+
+model Stream {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  creatorId     String?  @map("creator_id") @db.Uuid
+  title         String
+  thumbnailUrl  String?  @map("thumbnail_url")
+  productName   String   @map("product_name")
+  price         Decimal  @db.Decimal(10, 2)
+  originalPrice Decimal? @map("original_price") @db.Decimal(10, 2)
+  description   String?
+  category      String
+  isLive        Boolean  @default(false) @map("is_live")
+  viewersCount  Int      @default(0) @map("viewers_count")
+  likesCount    Int      @default(0) @map("likes_count")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  creator       Creator?       @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+  cartItems     CartItem[]
+  wishlistItems WishlistItem[]
+
+  @@map("streams")
+}
+
+model CartItem {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  streamId  String?  @map("stream_id") @db.Uuid
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  profile Profile? @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  stream  Stream?  @relation(fields: [streamId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, streamId])
+  @@map("cart_items")
+}
+
+model WishlistItem {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  streamId  String?  @map("stream_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  profile Profile? @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  stream  Stream?  @relation(fields: [streamId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, streamId])
+  @@map("wishlist_items")
+}
+
+model Following {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  creatorId String?  @map("creator_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+
+  profile Profile? @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  creator Creator? @relation(fields: [creatorId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, creatorId])
+  @@map("following")
+}
