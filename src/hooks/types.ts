@@ -1,7 +1,9 @@
+
 export interface Stream {
   id: string;
   title: string;
   thumbnail_url: string | null;
+  video_url: string | null;
   is_live: boolean;
   viewers_count: number;
   likes_count: number;

@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { MessageCircle, ShoppingCart, Heart, Share, ChevronUp, ChevronDown, ArrowLeft, Send } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -55,7 +54,6 @@ export const LivePlayer = () => {
     navigate(`/live/${prevStream.id}`, { replace: true });
   }, [currentStream, streams, navigate]);
 
-  // Add scroll event listener for navigation
   useEffect(() => {
     let isScrolling = false;
     
@@ -170,11 +168,23 @@ export const LivePlayer = () => {
 
       {/* Video Container */}
       <div className="relative w-full h-full">
-        <img 
-          src={currentStream.thumbnail_url || ''}
-          alt={currentStream.title}
-          className="w-full h-full object-cover"
-        />
+        {/* Use video element if video_url exists, otherwise fallback to image */}
+        {currentStream.video_url ? (
+          <video 
+            src={currentStream.video_url}
+            className="w-full h-full object-cover"
+            autoPlay
+            loop
+            muted
+            playsInline
+          />
+        ) : (
+          <img 
+            src={currentStream.thumbnail_url || ''}
+            alt={currentStream.title}
+            className="w-full h-full object-cover"
+          />
+        )}
         
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
